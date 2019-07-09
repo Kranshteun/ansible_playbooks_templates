@@ -1,0 +1,19 @@
+# Enbedded Roles Project
+site.yml # project playbook directory 
+roles/ # role directory with embedded roles
+   common/ # targets specific non-server groups
+     files/
+	 templates/
+	 tasks/
+	 handlers/
+	 vars/
+	 defaults/
+	 meta/
+   webservers/
+     files/
+	 templates/
+	 tasks/
+	 handlers/
+	 vars/
+	 defaults/
+	 meta/

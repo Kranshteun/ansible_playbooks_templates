@@ -1,0 +1,26 @@
+---
+- name: install and start apache
+  hosts: webservers
+  remote_user: target
+  become: yes # used to escalate to root 
+  
+  tasks:
+  - name: install epel repo
+    yum: name=epel-release state=present
+    
+  - name: install python bindings for SELinux
+    yum: name={{item}} state=present # variable declared with specific state
+    with_items: # variable defined by items bellow
+    - libselinux-python
+    - libsemanage-python
+    
+  - name: test to see if SELinux is running
+    command: getenforce
+    register: sestatus
+    changed_when: false 
+    
+  - name: install apache
+    yum: name=httpd state=present
+
+  - name: start apache
+    service: name=httpd state=started enabled=yes  
