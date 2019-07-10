@@ -1,7 +1,7 @@
 ---
-name: Configure apache 
- - hosts: myhosts
-   tasks:
+- name: Configure apache 
+  hosts: myhosts
+  tasks:
      - name: Update apt cache
        apt: update_cache=true
 	   
