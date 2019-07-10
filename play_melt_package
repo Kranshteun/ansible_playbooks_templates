@@ -1,0 +1,55 @@
+# https://meltdownattack.com
+
+- name: Patch Linux systems against Meltdown and Spectre
+  hosts: "{{ target_hosts | default('all') }}"
+  become: yes
+
+  vars:
+    reboot_after_update: no
+    packages:
+      # https://access.redhat.com/security/vulnerabilities/speculativeexecution
+      RedHat7:
+        - kernel-3.10.0-693.11.6.el7
+        - microcode_ctl-2.1-22.2.el7
+        - perf-3.10.0-693.11.6.el7
+        - python-perf-3.10.0-693.11.6.el7
+      RedHat6:
+        - kernel-2.6.32-696.18.7.el6
+        - kernel-firmware-2.6.32-696.18.7.el6
+        - perf-2.6.32-696.18.7.el6
+        - python-perf-2.6.32-696.18.7.el6
+
+      # https://www.debian.org/security/2018/dsa-4078
+      Debian7: []
+      Debian8: []
+      Debian9:
+        - linux-image-4.9.0-5-amd64
+
+      # https://wiki.ubuntu.com/SecurityTeam/KnowledgeBase/SpectreAndMeltdown
+      Ubuntu14: []
+      Ubuntu16: []
+
+  tasks:
+    - name: RHEL | Install kernel updates
+      yum:
+        name: "{{ packages[ansible_os_family ~ ansible_distribution_major_version] }}"
+        state: present
+      when: ansible_pkg_mgr == 'yum'
+      notify: reboot system
+
+    - name: DEBIAN | Install kernel updates
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+        cache_valid_time: 3600
+      with_items: "{{ packages[ansible_distribution ~ ansible_distribution_major_version] }}"
+      when: ansible_pkg_mgr == 'apt'
+      notify: reboot system
+
+  handlers:
+    - name: reboot system
+      shell: sleep 3; reboot
+      async: 15
+      poll: 0
+      when: reboot_after_update
