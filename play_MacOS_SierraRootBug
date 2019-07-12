@@ -1,0 +1,13 @@
+- name: Protect against MacOS High Sierra root bug
+hosts: macs
+become: yes
+tasks:
+- name: change root password
+  user:
+  name: root
+  update_password: always
+  password: “{{root_password |password_hash('sha512')}}”
+- name: address CVE-2017-13872
+  command: “softwareupdate -i ‘Security Update 2017-001’”
+- name: reboot after security updates
+  reboot:
