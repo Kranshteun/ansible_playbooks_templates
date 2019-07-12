@@ -1,0 +1,11 @@
+--- # One playbook for many facts, or different plays for different groups of hosts
+- name: Gathering system facts 
+  hosts: eos-switches
+  become: yes
+  become_method: enable
+  tasks:
+    - name: Gather facts (eos)
+      eos_facts:
+        gather_subset:
+          - "!hardware"
+  
