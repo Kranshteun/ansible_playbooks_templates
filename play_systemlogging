@@ -1,0 +1,27 @@
+---
+- name: Logging System Data
+  hosts: "{{target_hosts | default('all') }}"
+  become: yes # may increase the lize of collected file 
+  
+  tasks:
+  - name: Pull logs from hosts
+	path: /var/logs 
+	patterns: '*.log'
+	recurse: yes
+	register: _logs
+	
+  - name: Put logs in collectable # single or multiple destinations 
+    fetch:
+      src: "{{ item.path }}"
+      dest: logs
+      with_items: "{{ _logs.files }}"
+	  
+  - name: Destination path
+    fetch:
+	  src: /tmp/uniquefile
+	  dest: /tmp/prefix-{{ inventory_hostname}}
+	  flat: yes
+	  
+	  
+      
+	  
