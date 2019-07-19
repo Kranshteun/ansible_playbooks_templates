@@ -3,5 +3,5 @@
   remote_user: root
   tasks:
     - name: test connections
-	  ping:
-	  remote_user: myname 
+      ping:
+      remote_user: myname 
