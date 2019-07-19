@@ -15,13 +15,9 @@
       src: "{{ item.path }}"
       dest: logs
       with_items: "{{ _logs.files }}"
-	  
+      
   - name: Destination path
     fetch:
       src: /tmp/uniquefile
       dest: /tmp/prefix-{{ inventory_hostname}}
       flat: yes
-	  
-	  
-      
-	  
