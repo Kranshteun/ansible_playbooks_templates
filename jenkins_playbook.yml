@@ -3,25 +3,25 @@
   hosts: jenkins-handlers
   vars:
     my_jenkins_plugins:
-	  token-macro:
-	    enabled: yes
-	  build-pipeline-plugin:
-	    version: "1.4.9"
-		pinned: no
-		enabled: yes
+    token-macro:
+    enabled: yes
+    build-pipeline-plugin:
+    version: "1.4.9"
+	pinned: no
+	enabled: yes
    tasks:
      - name: Install plugins witout specific version
-	   jenkins_plugin:
-	     name: "{{ item.key }}"
-	   register: my_jenkins_plugin_unrevisioned
-	   when: >
+	 jenkins_plugin:
+	 name: "{{ item.key }}"
+	 register: my_jenkins_plugin_unrevisioned
+	   when: > # COndition can be chnaged to avoid conflicts; used generic example 
 	     'version' not in item.value
 	   with_dict: "{{my_jenkins_plugins }}"
 	   
 	 - name: Install plugins with a specific version
 	   jenkins_plugin:
 	     name: "{{ item.key }}"
-		 version: "{{ item.value['version'] }}"
+	     version: "{{ item.value['version'] }}"
 	   register: my_jenkins_plugin_revisioned
 	   when: >
 	     'version' in item.value
@@ -29,18 +29,18 @@
 	   
 	  - name: Initiate the fact
 	    set_fact:
-		   jenkins_restart_required: no
+	    jenkins_restart_required: no
 		   
 	  - name: Check if restart required by any of the versioned plugins
 	    set_fact:
-		  jenkins_restart_required: yes
-		when: item.changed
-		with_items: "{{ my_jenkins_plugin_versioned.results }}"
+            jenkins_restart_required: yes
+	      when: item.changed
+	      with_items: "{{ my_jenkins_plugin_versioned.results }}"
 		
 	  - name: Rstart Jenkins if required
 	    services: 
-		  name: jenkins
-		  state: restarted
+	      name: jenkins
+	      state: restarted
 		when: jenkins_restart_required
 		
 	  - name: Wait for Jenkins to start up
