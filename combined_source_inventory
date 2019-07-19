@@ -1,6 +1,0 @@
-inventory/ #Combining multiple inventory sources and source types under a dir
-  01-openstack.yml          # configure inventory plugin to get hosts from Openstack cloud
-  02-dynamic-inventory.py   # add additional hosts with dynamic inventory script
-  03-static-inventory       # add static hosts and groups
-  group_vars/
-    all.yml              # assign variables to all hosts
