@@ -1,4 +1,4 @@
----
+--- # Modify to satisfy current configurations 
 - name: Jenkins Master Play
   hosts: jenkins-handlers
   vars:
@@ -76,6 +76,4 @@
         state: "{{ 'enabled' if item.value['enabled'] else 'disabled'}}"
       when: >
         'enabled' in item.value
-      with_dict: "{{ my_jenkins_plugins }}"
-		 
-	   
+      with_dict: "{{ my_jenkins_plugins }}" 
