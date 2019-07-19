@@ -5,10 +5,10 @@
   
   tasks:
   - name: Pull logs from hosts
-	path: /var/logs 
-	patterns: '*.log'
-	recurse: yes
-	register: _logs
+    path: /var/logs 
+    patterns: '*.log'
+    recurse: yes
+    register: _logs
 	
   - name: Put logs in collectable # single or multiple destinations 
     fetch:
@@ -18,9 +18,9 @@
 	  
   - name: Destination path
     fetch:
-	  src: /tmp/uniquefile
-	  dest: /tmp/prefix-{{ inventory_hostname}}
-	  flat: yes
+      src: /tmp/uniquefile
+      dest: /tmp/prefix-{{ inventory_hostname}}
+      flat: yes
 	  
 	  
       
